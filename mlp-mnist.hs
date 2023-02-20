@@ -129,7 +129,7 @@ updateOn rate indicies model = do
   return newModel
 
 updateSequence :: Double -> (Int, Int, Int) -> Model -> IO Model
-updateSequence rate (start, end, batchSize) = foldl (>=>) return ops
+updateSequence rate (start, end, batchSize) = foldr (>=>) return ops
    where
      ops = map (updateOn rate) indexList
      indexList = map (\x -> (x, x + batchSize)) [start, (start + batchSize)..(end - 1)]

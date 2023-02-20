@@ -115,7 +115,7 @@ dtl :: (a, a) -> [a]
 dtl (x, y) = [x, y]
 
 forwardTransf :: Model -> Intermediate -> Writer [Intermediate] Intermediate  
-forwardTransf m = foldl (>=>) return operations 
+forwardTransf m = foldr (>=>) return operations 
   where 
     operations :: [Intermediate -> Writer [Intermediate] Intermediate]
     operations = concat $ map trtl (zip (zip as bs) cs) 
@@ -147,7 +147,7 @@ intersperse [] _ = []
 intersperse (x:xs) (y:ys) = x:y:(intersperse xs ys)
 
 backwardTransf :: Model -> [Intermediate] -> Intermediate -> Writer [Intermediate] Intermediate
-backwardTransf m i = foldl (<=<) return (intersperse b a)
+backwardTransf m i = foldr (<=<) return (intersperse b a)
   where 
     a = backwardTransfa (weights m)
     b = backwardTransfb i
